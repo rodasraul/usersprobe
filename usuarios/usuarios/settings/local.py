@@ -6,11 +6,6 @@ ALLOWED_HOSTS = []
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-        #'NAME': 'usersprobe',
-        #'USER': 'raul',
-        #'PASSWORD': '09973911',
-        #'HOST': '172.16.90.108',
-        #'PORT': '5432',
 
 DATABASES = {
     'default': {
