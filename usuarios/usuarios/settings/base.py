@@ -106,6 +106,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# con esta constante especificamos que trabajaremos con otro modelo de USUARIOS
+# APLICACION.MODELO
 AUTH_USER_MODEL = 'users.User'
 
 

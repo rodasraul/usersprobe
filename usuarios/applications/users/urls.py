@@ -1,7 +1,7 @@
 from django.urls import path
 
 from . import views
-
+# Nombre del conjunto de URLs
 app_name = "users_app"
 
 urlpatterns = [

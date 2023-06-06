@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.contrib.auth
+from django.contrib.auth import authenticate, login
 # Create your views here.
 from django.views.generic import (
-    CreateView
+    CreateView,
 )
-from django.views.generic import (
+from django.views.generic.edit import (
     FormView
 )
 
@@ -15,6 +15,7 @@ from .models import User
 
 class UserRegisterView(FormView):
     template_name = 'users/register.html'
+    # Trabajamos con un formulario FORMS.PY
     form_class = UserRegisterForm
     success_url = '/'
 

@@ -3,7 +3,7 @@ from django import forms
 from .models import User
 
 class UserRegisterForm(forms.ModelForm):
-
+    # Para que se ingrese la contraseña en el formulario, retornará cifrada NO PLANA
     password1 = forms.CharField(
         label='Contraseña',
         required=True,
@@ -14,7 +14,7 @@ class UserRegisterForm(forms.ModelForm):
         )
     )
     password2 = forms.CharField(
-        label='Contraseña',
+        label='Contraseña (Repetir)',
         required=True,
         widget=forms.PasswordInput(
             attrs={
@@ -24,16 +24,17 @@ class UserRegisterForm(forms.ModelForm):
     )
 
     class Meta:
+        # vinculamos al modelo
         model = User
         # Para traer todos los campos
         # fields = ('__all__')
+        # Especificamos los campos que veremos en el formulario
         fields = (
             'username',
             'email',
             'nombres',
             'apellidos',
             'genero',
-
         )
 
     def clean_password2(self):
