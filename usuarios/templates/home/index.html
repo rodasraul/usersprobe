@@ -9,10 +9,11 @@
 <body>
 
     <h1>Panel de Usuario:</h1>
-    <h3>Bienvenidos:</h3>
+    <h3>Bienvenidos: {{ user}}</h3>
+    <h4>{{ fecha }}</h4>
     <ul>
         <li><a href="{% url 'users_app:user-logout' %}">Cerrar Sesión</a></li>
-        <li><a href="#">Actualizar Datos</a></li>
+        <li><a href="{% url 'users_app:user-update' %}">Actualizar Datos</a></li>
     </ul>
 </body>
 </html>

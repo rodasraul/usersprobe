@@ -1,4 +1,6 @@
 from django.shortcuts import render
+# 1) Importamos Mixin para validar si usuario esta logueado
+from django.contrib.auth.mixins import LoginRequiredMixin
 # Importamos la funcion reverse para poder navegar o redirigir entre las funciones del sistema
 from django.urls import reverse_lazy, reverse
 # Importamos auth e importamos la funcion authenticate, login y logout
@@ -15,12 +17,20 @@ from django.views.generic.edit import (
     FormView
 )
 # Importamos los formularios: UserRegisterForm y LoginForm
-from .forms import UserRegisterForm, LoginForm
+from .forms import (
+    UserRegisterForm,
+    LoginForm,
+    UpdatePasswordForm
+)
 # Importamos el modelo
 from .models import User
 
+#class UserRegisterView(LoginRequiredMixin, FormView):
 class UserRegisterView(FormView):
     template_name = 'users/register.html'
+    # 2) Agregamos MIXIN para que valide si tenemos usuario logueado.
+    # login_url = reverse_lazy('users_app:user-login')
+
     # Trabajamos con un formulario FORMS.PY
     form_class = UserRegisterForm 
     success_url = '/'
@@ -88,3 +98,31 @@ class LogoutView(View):
                 'users_app:user-login'
             )
         )
+
+class UpdatePasswordView(LoginRequiredMixin, FormView):
+    template_name = 'users/update.html'
+    login_url = reverse_lazy('users_app:user-login')
+    form_class = UpdatePasswordForm
+    success_url = reverse_lazy('users_app:user-login')
+
+    def form_valid(self, form):
+        # Recuperar usuario validado del sistema
+        usuario = self.request.user
+        # Obtener los datos para hacer la autenticacion
+        # De la ariable usuario obtengo el username
+        # Recuperamos desde el formulario el password ingresado
+        user = authenticate(
+            username=usuario.username,
+            password=form.cleaned_data['password1']
+        )
+        # Si la autenticacion es correcta en la variable user ya existen datos
+        if user:
+            new_password = form.cleaned_data['password2']
+            # Encripta la contraseña 
+            usuario.set_password(new_password)
+            # Guardamos los datos
+            usuario.save()
+        
+        # Con logout se cierra el sistema y se vuelve al login, por seguridad
+        logout(self.request)
+        return super(UpdatePasswordView, self).form_valid(form)

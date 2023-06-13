@@ -1,4 +1,6 @@
 from django import forms
+# Importamos funcion authenticate para validar al usuario
+from django.contrib.auth import authenticate
 
 from .models import User
 
@@ -71,3 +73,41 @@ class LoginForm(forms.Form):
     )
 
     # SE PUEDE HACER QUE AQUI SE VERIFIQUE SI EL USUARIO ES O NO ES USUARIO VALIDO
+    # VALIDACION DEL USUARIO Y CONTRASEÑA
+    #se utiliza la funcion CLEAN()
+    def clean(self):
+        # Retorna todos los datos
+        cleaned_data = super(LoginForm, self).clean()
+
+        # Obtento datos del formulario
+        username = self.cleaned_data['username']
+        password = self.cleaned_data['password']
+
+        if not authenticate(username=username, password=password):
+            # Si no ha devuelto un usuario NO puede acceder, enviaremos un error
+            # RAISE corta todo el proceso
+            raise forms.ValidationError('Los datos de usuario no son correctos')
+        
+        # Hacemos el return al cleaned_data
+        return self.cleaned_data
+
+class UpdatePasswordForm(forms.Form):
+    password1 = forms.CharField(
+        label='Contraseña',
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Contraseña ACTUAL'
+            }
+        )
+    )
+    password2 = forms.CharField(
+        label='Contraseña',
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Contraseña NUEVA'
+            }
+        )
+    )
+

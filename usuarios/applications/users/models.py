@@ -20,8 +20,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     nombres = models.CharField(max_length=30, blank=True)
     apellidos = models.CharField(max_length=30, blank=True)
     genero = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
+    codregistro = models.CharField(max_length=6, blank=True)
     # AbstractBaseUser obliga a crear el atributo is_staff en el modelo actual, por default es FALSE
     is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
     # Especificar cual atributo para hacer el login desde el Administrador
     USERNAME_FIELD = 'username'
     # Especificar Campos que SOLICITAR  ingresar al crear un usuario
