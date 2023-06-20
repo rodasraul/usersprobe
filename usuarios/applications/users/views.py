@@ -1,4 +1,6 @@
 from django.shortcuts import render
+# funcio para enviar correo
+from django.core.mail import send_mail
 # 1) Importamos Mixin para validar si usuario esta logueado
 from django.contrib.auth.mixins import LoginRequiredMixin
 # Importamos la funcion reverse para poder navegar o redirigir entre las funciones del sistema
@@ -20,10 +22,13 @@ from django.views.generic.edit import (
 from .forms import (
     UserRegisterForm,
     LoginForm,
-    UpdatePasswordForm
+    UpdatePasswordForm,
+    VerificationForm
 )
 # Importamos el modelo
 from .models import User
+
+from .functions import code_generator
 
 #class UserRegisterView(LoginRequiredMixin, FormView):
 class UserRegisterView(FormView):
@@ -37,6 +42,9 @@ class UserRegisterView(FormView):
 
     # 
     def form_valid(self, form):
+        # Importamos el codigo que se enviará por correo
+        codigo = code_generator()
+
         # Usamos el modelo USER y usamos el MANAGER con el metodo create_user
         # form.cleaned_data recuperamos datos del formulario
         User.objects.create_user(
@@ -46,9 +54,26 @@ class UserRegisterView(FormView):
             nombres=form.cleaned_data['nombres'],
             apellidos=form.cleaned_data['apellidos'],
             genero=form.cleaned_data['genero'],
+            codregistro=codigo
         )
+        # Enviar el codigo al email del usuario
+        asunto = 'Confirmacion de email'
+        mensaje = '<h1>Codigo de verificacion: ' + codigo + '</h1>'
+        email_remitente = 'raul@rhodasingenieria.com'
+        # enviando el correo
+        send_mail(asunto, mensaje, email_remitente, [form.cleaned_data['email'],])
+        # Redirigir a pantalla de validacion
+
         # Sobreescribimos el metodo de la clase
-        return super(UserRegisterView, self).form_valid(form)
+        # Esta linea nos envia al sucess_url que esta al inicio de la clase
+        # La estamos comentando porque ahora se dirigira a otra pantalla de validacion del codigo para el correo electronico
+        # return super(UserRegisterView, self).form_valid(form)
+
+        return HttpResponseRedirect(
+            reverse(
+                'users_app:user-verification'
+            )
+        )
     
 # No usar para todo FORMVIEW, las otras vistas tambien sirven muchisimo
 class LoginUser(FormView):
@@ -126,3 +151,12 @@ class UpdatePasswordView(LoginRequiredMixin, FormView):
         # Con logout se cierra el sistema y se vuelve al login, por seguridad
         logout(self.request)
         return super(UpdatePasswordView, self).form_valid(form)
+
+class CodeVerificationView(FormView):
+    template_name = 'users/verification.html'
+    form_class = VerificationForm
+    success_url = reverse_lazy('users_app:user-login')
+    
+    def form_valid(self, form):
+        return super(CodeVerificationView, self).form_valid(form)
+

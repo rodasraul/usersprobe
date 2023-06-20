@@ -89,8 +89,10 @@ class LoginForm(forms.Form):
             raise forms.ValidationError('Los datos de usuario no son correctos')
         
         # Hacemos el return al cleaned_data
+        print('Llegas aqui....')
         return self.cleaned_data
 
+# Construimos el formulario
 class UpdatePasswordForm(forms.Form):
     password1 = forms.CharField(
         label='Contraseña',
@@ -111,3 +113,5 @@ class UpdatePasswordForm(forms.Form):
         )
     )
 
+class VerificationForm(forms.Form):
+    codregistro = forms.CharField(required=True)

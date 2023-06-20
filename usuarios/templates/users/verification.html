@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cambiar contraseña</title>
+    <title>Document</title>
 </head>
 <body>
-<h1>Cambiar Contraseña: {{ user.apellidos }}</h1>
+<h1>Verificacion de E-mail</h1>
+<h3>Ingrese código de verificación: </h3>
 <form method="post">{% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Actualizar</button>
+    <button type="submit">Confirmar</button>
 </form>
 </body>
 </html>

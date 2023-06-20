@@ -1,5 +1,4 @@
 # Funciones extra de la aplicacion USERS
-
 import random
 import string
 

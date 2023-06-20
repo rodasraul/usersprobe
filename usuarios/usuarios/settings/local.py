@@ -13,7 +13,7 @@ DATABASES = {
         'NAME': get_secret('DB_NAME'),
         'USER': get_secret('USER'),
         'PASSWORD': get_secret('PASSWORD'),
-        'HOST': '172.16.90.108',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -29,3 +29,11 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 MEDIA_URL = '/media/'
 #MEDIA_ROOT = BASE_DIR.child('media')
 MEDIA_ROOT = [BASE_DIR / 'media']
+
+#EMAIL ACTIVAR ENVIO
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = get_secret('EMAIL')
+EMAIL_HOST_PASSWORD = get_secret('PASS_EMAIL')
+EMAIL_PORT = 587
+
